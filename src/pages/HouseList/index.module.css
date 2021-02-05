@@ -1,0 +1,26 @@
+.house_list {
+  height: 100%;
+}
+
+.header {
+  background-color: #f6f5f6;
+  height: 45px;
+  padding-left: 10px;
+}
+
+.house_search {
+  position: relative;
+  top: 0;
+  padding: 0;
+  margin: 5px;
+}
+
+/* 全局类名 使得它不会被编译为哈希字符串 */
+.house_list .header .iconback {
+  font-size: 16px;
+  color: #999;
+}
+
+.header :global(.search) {
+  height: 30px;
+}
