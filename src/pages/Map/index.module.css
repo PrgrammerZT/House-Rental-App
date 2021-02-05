@@ -84,6 +84,7 @@ p.name {
   transition: all 1s;
   transform: translate3d(0, 330px, 0);
   background: #fff;
+  z-index: 1;
 }
 
 .show {

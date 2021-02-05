@@ -78,13 +78,16 @@ export default class Filter extends Component {
   };
 
   //保存内容
-  onSave = (selectedObj, type) => {
+  onSave = async (selectedObj, type) => {
     const newTitledSelectedStatus = this.checkIfHighLight(selectedObj, type);
+    //使用await使得setState的异步回调变成同步 失了智
 
-    this.setState((state) => {
+    await this.setState((state) => {
       const { selectedValues } = state;
       if (type === "more") {
         const newSelectedValues = { ...selectedValues, [type]: selectedObj };
+        // console.log("newSelectedValues===");
+        // console.log(newSelectedValues);
         return {
           openType: "",
           selectedValues: newSelectedValues,
@@ -98,14 +101,47 @@ export default class Filter extends Component {
         };
       }
     });
+
+    //保存后就获取当前所有的数据
+    const filterOrigin = { ...this.state.selectedValues };
+    const reqdata = this.filterForData(filterOrigin);
+
+    // console.log(reqdata);
+    // debugger;
+    // 传递给父组件 获取数据
+    this.props.onFilter(reqdata);
+    //筛选数据并获取
   };
+
+  filterForData = (filterOrigin) => {
+    const databag = {};
+    const { area, mode, price, more } = filterOrigin;
+    const areakey = area[0];
+    let areaValue = "";
+    if (area.length === 3) {
+      area[2] === "null" ? (areaValue = area[1]) : (areaValue = area[2]);
+    }
+    databag[areakey] = areaValue;
+
+    //方式和租金可以直接拿第一项 因为它只有一项
+    databag["mode"] = mode[0];
+    databag["price"] = price[0];
+
+    //更多是一个字符串 我们要用逗号分割 但它是一整个字符串
+    databag["more"] = more.join(",");
+
+    // debugger;
+
+    return databag;
+  };
+
   //方法
   handleClick = (type) => {
     const { selectedValues, titleSelectedStatus } = this.state;
     //创建新的标题选中状态对象
     const newTitledSelectedStatus = { ...titleSelectedStatus };
     //遍历标题选中状态对象
-    console.log(selectedValues);
+    // console.log(selectedValues);
     Object.keys(titleSelectedStatus).forEach((key) => {
       if (key === type) {
         //这是当前标题 让它高亮
@@ -149,9 +185,17 @@ export default class Filter extends Component {
     return openType === "mode" || openType === "area" || openType === "price";
   };
 
-  changeSelected = (newSelectedValue) => {
+  changeFilterPickerSelected = (newSelectedValue) => {
     this.setState({
       selectedValues: newSelectedValue,
+    });
+  };
+
+  changeFilterMoreSelected = (newSelected) => {
+    const { selectedValues } = this.state;
+    const newSelectedValues = { ...selectedValues, more: newSelected };
+    this.setState({
+      selectedValues: newSelectedValues,
     });
   };
 
@@ -194,7 +238,7 @@ export default class Filter extends Component {
           cols={cols}
           type={this.state.openType}
           defaultValue={defaultValue}
-          changeSelected={this.changeSelected}
+          changeSelected={this.changeFilterPickerSelected}
         ></FilterPicker>
       );
     }
@@ -248,6 +292,7 @@ export default class Filter extends Component {
           type={openType}
           defaultValue={defaultValue}
           onleave={this.onCancel}
+          changeSelected={this.changeFilterMoreSelected}
         />
       );
     }

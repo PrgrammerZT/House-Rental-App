@@ -55,16 +55,9 @@ export default class FilterMore extends Component {
     onSave(this.state.selectedValue, type);
   };
 
-  onCancel = () => {
-    //取消的事件处理
-    this.setState({
-      selectedValue: [],
-    });
-  };
-
   render() {
     const { roomType, oriented, floor, characteristic } = this.props.data;
-    const { onleave, type } = this.props;
+    const { onleave, type, changeSelected } = this.props;
     // console.log(onleave);
     return (
       <div className={styles.root}>
@@ -98,8 +91,11 @@ export default class FilterMore extends Component {
           className={styles.footer}
           cancelText="清除"
           onCancel={() => {
-            //把type写死 因为只有这一个
-            this.onCancel();
+            //把type写死 因为只有这一个 需要更改的是父组件内more的状态 否则没有用
+            this.setState({ selectedValue: [] });
+            //...需要改变父级状态 否则清除没有效果
+            changeSelected([]);
+
             //这里的onCancel的名字叫做onleave
             onleave(type);
           }}
