@@ -41,3 +41,7 @@ ul {
   left: 0;
   bottom: 0;
 }
+
+.am-tab-bar-bar {
+  z-index: 1 !important;
+}

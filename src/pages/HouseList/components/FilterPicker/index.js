@@ -7,14 +7,15 @@ import FilterFooter from "../../../../components/FilterFooter";
 export default class FilterPicker extends Component {
   state = {
     value: "",
-    //selectedValue: {},
+    selectedValue: {},
   };
   componentDidMount() {
-    // const { defaultValue } = this.props;
-    // // console.log(defaultValue);
-    // this.setState({
-    //   selectedValue: defaultValue,
-    // });
+    const { defaultValue, type } = this.props;
+    // console.log(defaultValue);
+    this.setState({
+      selectedValue: defaultValue,
+      value: defaultValue[type],
+    });
 
     console.log("picker create");
   }
@@ -33,15 +34,16 @@ export default class FilterPicker extends Component {
         {/* 选择器组件： */}
         <PickerView
           data={data}
-          value={defaultValue[type]}
+          value={this.state.value}
           cols={cols}
           onChange={(newvalue) => {
             this.setState((state, props) => {
               const newSelected = { ...defaultValue, [type]: newvalue };
-              //把这个东西给changeSelected
-              changeSelected(newSelected);
+              // //把这个东西给changeSelected
+              // changeSelected(newSelected);
               return {
                 value: newvalue,
+                selectedValue: newSelected,
               };
             });
           }}
@@ -53,7 +55,8 @@ export default class FilterPicker extends Component {
             onCancel(type);
           }}
           onOk={() => {
-            onSave(defaultValue, type);
+            // console.log(this.state.selectedValue)
+            onSave(this.state.selectedValue, type);
           }}
         />
       </>

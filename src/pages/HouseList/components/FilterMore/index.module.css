@@ -69,7 +69,3 @@
   background-color: #fff;
   z-index: 3;
 }
-
-:global(.am-tab-bar-bar) {
-  z-index: 2 !important;
-}

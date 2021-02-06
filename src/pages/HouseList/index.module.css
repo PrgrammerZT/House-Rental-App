@@ -29,6 +29,12 @@
   padding: 0 15px;
 }
 
+/* 重写样式 原因是绝对定位产生了覆盖
+.houseItems :global(.ReactVirtualized__List) {
+  padding-bottom: 50px;
+  padding-top: 40px;
+} */
+
 .loadingHolder {
   background-color: #333333;
   width: 100%;

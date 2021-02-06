@@ -1,0 +1,14 @@
+.sticky {
+  position: fixed;
+  /* 保证在界面的左边和顶部 */
+  left: 0;
+  top: 0;
+  width: 100%;
+  /* 给一个z-index防止被覆盖*/
+  z-index: 1;
+}
+
+.pblist {
+  padding-bottom: 50px;
+  padding-top: 40px;
+}

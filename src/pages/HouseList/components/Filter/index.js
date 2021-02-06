@@ -6,6 +6,7 @@ import FilterMore from "../FilterMore";
 import request from "../../../../utils/request";
 import styles from "./index.module.css";
 import { getCurrentCity } from "../../../../utils";
+import { isEqual } from "lodash";
 const titleSelectedStatus = {
   area: false,
   mode: false,
@@ -38,9 +39,12 @@ export default class Filter extends Component {
     //清除指的是全都没了
     if (type === "more") {
       selectedObj = selectedValues[type];
-      //清除more数组
-      const newselectedValues = { ...selectedValues, more: [] };
-      await this.setState({ selectedValues: newselectedValues });
+      //意味着不需要改变
+      if (selectedObj.length !== 0) {
+        //清除more数组
+        const newselectedValues = { ...selectedValues, more: [] };
+        await this.setState({ selectedValues: newselectedValues });
+      }
       //强制刷新数据
       this.props.onFilter(this.filterForData(this.state.selectedValues));
     } else {
@@ -91,12 +95,22 @@ export default class Filter extends Component {
 
   //保存内容
   onSave = async (selectedObj, type) => {
+    // console.log(selectedObj);
     const newTitledSelectedStatus = this.checkIfHighLight(selectedObj, type);
+    //selectedObj的type是more 我们就讨论一下
+    if (type === "more") {
+      //比较的是more下的数据有无更改 使用lodash
+      const isequal = isEqual(this.state.selectedValues.more, selectedObj);
+      if (isequal) {
+        //一样 意味着不需要更新
+        return;
+      }
+    }
     //使用await使得setState的异步回调变成同步 失了智
-
     await this.setState((state) => {
       const { selectedValues } = state;
       if (type === "more") {
+        //比较一下和上次有没有不同
         const newSelectedValues = { ...selectedValues, [type]: selectedObj };
         // console.log("newSelectedValues===");
         // console.log(newSelectedValues);
@@ -150,6 +164,7 @@ export default class Filter extends Component {
 
   //方法
   handleClick = (type) => {
+    // this.htmlbody.classList.add("body-fixed");
     const { selectedValues, titleSelectedStatus } = this.state;
     //创建新的标题选中状态对象
     const newTitledSelectedStatus = { ...titleSelectedStatus };
@@ -287,6 +302,10 @@ export default class Filter extends Component {
     this.setState({
       selectedValues: defaultValues,
     });
+
+    //拿到body
+    this.htmlbody = document.body;
+    //更改padding值
   }
 
   renderFilterMore = () => {

@@ -14,11 +14,21 @@
 }
 
 .content {
-  position: relative;
+  /* position: relative; */
+  position: absolute;
   z-index: 3;
+  width: 100%;
   background-color: #fff;
 }
 
 .content :global(.am-flexbox) {
   text-align: center;
 }
+
+/* body-fixed的类名 在展示遮罩层时 应该禁止滑动 其实就是隐藏剩余内容*/
+:global(.body-fixed) {
+  overflow: hidden;
+}
+
+/*重写ReactVirtualized_list的类中的*/
+/* 直接加上style即可 */
