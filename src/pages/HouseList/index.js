@@ -1,5 +1,5 @@
 import { Flex, Toast } from "antd-mobile";
-import React from "react";
+import React, { createRef } from "react";
 import SearchHeader from "../../components/SearchHeader";
 import { getCurrentCity } from "../../utils";
 import HouseItems from "../../components/HouseItems";
@@ -23,6 +23,8 @@ export default class HouseList extends React.PureComponent {
     filters: {},
   };
 
+  sticky = createRef();
+
   getCity = async () => {
     const result = await getCurrentCity();
     return result[0].label;
@@ -35,7 +37,8 @@ export default class HouseList extends React.PureComponent {
     });
 
     //进入页面时就要获取数据并且展示数据
-    this.showHouse();
+    await this.showHouse();
+    this.sticky.current.handleListPadding();
   };
 
   showHouse = async () => {
@@ -167,7 +170,7 @@ export default class HouseList extends React.PureComponent {
             iconColor="#00ae66"
           ></SearchHeader>
         </Flex>
-        <Sticky height={40}>
+        <Sticky height={40} ref={this.sticky}>
           <Filter onFilter={this.onFilters}></Filter>
         </Sticky>
         <div className={styles.houseItems}>

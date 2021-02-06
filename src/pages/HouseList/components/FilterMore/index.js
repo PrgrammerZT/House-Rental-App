@@ -91,13 +91,19 @@ export default class FilterMore extends Component {
           className={styles.footer}
           cancelText="清除"
           onCancel={async () => {
+            let flag = true;
+            //判断一下当前的selectedValue是否为空
+            if (this.state.selectedValue.length === 0) {
+              //其实不需要更新了,传回一个false;
+              flag = false;
+            }
             //把type写死 因为只有这一个 需要更改的是父组件内more的状态 否则没有用
             this.setState({ selectedValue: [] });
-            //...需要改变父级状态 否则清除没有效果
+            ////...需要改变父级状态 否则高亮没有效果
             await changeSelected([]);
 
             //这里的onCancel的名字叫做onleave
-            onleave(type);
+            onleave(type, flag);
           }}
           onOk={this.onOk}
         />

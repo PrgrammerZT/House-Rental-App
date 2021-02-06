@@ -43,5 +43,5 @@ ul {
 }
 
 .am-tab-bar-bar {
-  z-index: 1 !important;
+  z-index: 0 !important;
 }

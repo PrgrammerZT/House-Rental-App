@@ -21,29 +21,35 @@ export default class Sticky extends React.PureComponent {
       //占位 但是被z-index为1的覆盖
       //根据props传递过来height
       placeholderEL.style.height = this.props.height + "px";
-      this.virtual_list.classList.remove(styles.pblist);
+      this.virtual_list.classList.remove(styles.ptlist);
     } else {
       //不吸顶
       contentEL.classList.remove(styles.sticky);
       //占位 但是被z-index为1的覆盖
       placeholderEL.style.height = "0px";
-      this.virtual_list.classList.add(styles.pblist);
+      this.virtual_list.classList.add(styles.ptlist);
     }
   };
   componentWillUnmount() {
     //卸载组件的时候 也应该恢复原样
+    this.virtual_list.classList.remove(styles.ptlist);
     this.virtual_list.classList.remove(styles.pblist);
   }
   componentDidMount() {
     this.eventid = window.addEventListener("scroll", this.handleScroll);
+  }
 
+  //让父组件来调用这个方法就得了
+  handleListPadding = () => {
+    //当页面加载完成后 再使用
     this.virtual_list = document.getElementsByClassName(
       "ReactVirtualized__List"
     )[0];
 
     //一开始没有scroll就要添加样式
+    this.virtual_list.classList.add(styles.ptlist);
     this.virtual_list.classList.add(styles.pblist);
-  }
+  };
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.eventid);

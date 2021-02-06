@@ -28,10 +28,11 @@ export default class Filter extends Component {
     selectedValues: {},
   };
   //隐藏对话框
-  onCancel = async (type) => {
+  onCancel = async (type, moreupdateflag) => {
     //Cancel的时候
     //type正确 但是要拿到selectedObj
     //逻辑 点了取消以后 我们要返回其上一次的状态 而不是和确定一样
+    this.htmlbody.classList.remove("body-fixed");
     const { selectedValues } = this.state;
     let selectedObj = {};
     //点击取消和清除是不同的
@@ -39,14 +40,14 @@ export default class Filter extends Component {
     //清除指的是全都没了
     if (type === "more") {
       selectedObj = selectedValues[type];
-      //意味着不需要改变
-      if (selectedObj.length !== 0) {
+      //数据没有变化并且两次都是0 意味着不用改变 反过来就是需要改变
+      if (moreupdateflag) {
         //清除more数组
         const newselectedValues = { ...selectedValues, more: [] };
         await this.setState({ selectedValues: newselectedValues });
+        //强制刷新数据
+        this.props.onFilter(this.filterForData(this.state.selectedValues));
       }
-      //强制刷新数据
-      this.props.onFilter(this.filterForData(this.state.selectedValues));
     } else {
       //其他情况应该返回上一次的状态 具体来说就是不改变原有的selectedValues;
       console.log("非more的情况");
@@ -96,6 +97,7 @@ export default class Filter extends Component {
   //保存内容
   onSave = async (selectedObj, type) => {
     // console.log(selectedObj);
+    this.htmlbody.classList.remove("body-fixed");
     const newTitledSelectedStatus = this.checkIfHighLight(selectedObj, type);
     //selectedObj的type是more 我们就讨论一下
     if (type === "more") {
@@ -103,6 +105,18 @@ export default class Filter extends Component {
       const isequal = isEqual(this.state.selectedValues.more, selectedObj);
       if (isequal) {
         //一样 意味着不需要更新
+        this.setState({
+          openType: "",
+        });
+        return;
+      }
+    } else {
+      const isequal = isEqual(this.state.selectedValues, selectedObj);
+      if (isequal) {
+        //一样 意味着不用更新
+        this.setState({
+          openType: "",
+        });
         return;
       }
     }
@@ -164,7 +178,9 @@ export default class Filter extends Component {
 
   //方法
   handleClick = (type) => {
-    // this.htmlbody.classList.add("body-fixed");
+    //使得点击遮罩外不能滑动
+    this.htmlbody.classList.add("body-fixed");
+
     const { selectedValues, titleSelectedStatus } = this.state;
     //创建新的标题选中状态对象
     const newTitledSelectedStatus = { ...titleSelectedStatus };
