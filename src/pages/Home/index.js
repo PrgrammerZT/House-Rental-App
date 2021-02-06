@@ -28,34 +28,31 @@ export default class Home extends React.PureComponent {
   };
   async getNews() {
     console.log(this.state.cityVal);
-    const { data } = await request.get("/home/news", {
+    const data = await request.get("/home/news", {
       params: { area: this.state.cityVal },
     });
 
-    const { body } = data;
     this.setState(() => {
       return {
-        news: body,
+        news: data,
       };
     });
   }
   async getGroup() {
-    const { data } = await request.get("/home/groups", {
+    const data = await request.get("/home/groups", {
       params: { area: this.state.cityVal },
     });
 
-    const { body } = data;
-
     this.setState({
-      groups: body,
+      groups: data,
     });
   }
 
   async getData() {
-    const { data } = await request.get("/home/swiper");
-    const { body } = data;
+    const data = await request.get("/home/swiper");
+
     this.setState({
-      data: body,
+      data: data,
       CarouselDidLoad: true,
     });
   }

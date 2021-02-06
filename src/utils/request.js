@@ -14,7 +14,7 @@ service.interceptors.request.use((config) => {
 service.interceptors.response.use((response) => {
   Toast.hide();
   service.isLoading = false;
-  return Promise.resolve(response);
+  return Promise.resolve(response.data.body);
 });
 
 export default service;

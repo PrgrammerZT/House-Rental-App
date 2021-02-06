@@ -6,10 +6,11 @@ function NavHeader(props) {
   const defaultHandler = () => props.history.go(-1);
   return (
     <NavBar
-      className="navbar"
+      className={["navbar", props.className || ""].join("")}
       mode="light"
       icon={<i className="iconfont icon-back" style={{ color: "#333" }}></i>}
       onLeftClick={props.onLeftClick || defaultHandler}
+      rightContent={props.rightContent}
     >
       {props.children}
     </NavBar>

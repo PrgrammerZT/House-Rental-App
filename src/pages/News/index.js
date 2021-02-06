@@ -7,16 +7,13 @@ export default class News extends React.PureComponent {
   };
   async getNews() {
     const cityVal = localStorage.getItem("hkzf_city")[0].value;
-    const { data } = await request.get("/home/news", {
+    const data = await request.get("/home/news", {
       params: { area: cityVal },
     });
 
-    // console.log(data);
-
-    const { body } = data;
     this.setState(() => {
       return {
-        news: body,
+        news: data,
       };
     });
   }

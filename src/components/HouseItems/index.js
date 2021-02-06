@@ -1,11 +1,22 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 import BASE_URL from "../../utils/url";
 import styles from "./index.module.css";
-export default class HouseItems extends React.PureComponent {
+class HouseItems extends React.PureComponent {
   render() {
     const { houseImg, title, desc, tags, price, houseCode, style } = this.props;
     return (
-      <div className={styles.house} key={houseImg} style={style}>
+      <div
+        className={styles.house}
+        key={houseImg}
+        style={style}
+        onClick={
+          //这里要跳转到详情页面 传入一个函数 而不是一个返回值
+          () => {
+            this.props.history.push(`/detail/${houseCode}`);
+          }
+        }
+      >
         <div className={styles.imgWrap}>
           <img className={styles.img} src={BASE_URL + houseImg} alt="" />
         </div>
@@ -33,3 +44,5 @@ export default class HouseItems extends React.PureComponent {
     );
   }
 }
+
+export default withRouter(HouseItems);

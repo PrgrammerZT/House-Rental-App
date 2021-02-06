@@ -7,6 +7,7 @@ import request from "../../../../utils/request";
 import styles from "./index.module.css";
 import { getCurrentCity } from "../../../../utils";
 import { isEqual } from "lodash";
+import { Spring } from "react-spring/renderprops";
 const titleSelectedStatus = {
   area: false,
   mode: false,
@@ -290,12 +291,19 @@ export default class Filter extends Component {
 
   renderMask = () => {
     return this.shouldShowMask() ? (
-      <div
-        className={styles.mask}
-        onClick={() => {
-          this.onCancel(this.state.openType);
+      <Spring to={{ opacity: 1 }} from={{ opacity: 0 }}>
+        {(props) => {
+          return (
+            <div
+              style={props}
+              className={styles.mask}
+              onClick={() => {
+                this.onCancel(this.state.openType);
+              }}
+            ></div>
+          );
         }}
-      ></div>
+      </Spring>
     ) : (
       ""
     );
@@ -304,12 +312,12 @@ export default class Filter extends Component {
   getFilterData = async () => {
     const res = await getCurrentCity();
     const value = res[0].value;
-    const { data } = await request.get("/houses/condition", {
+    const data = await request.get("/houses/condition", {
       params: { id: value },
     });
-    const { body } = data;
+
     this.setState({
-      filterObj: body,
+      filterObj: data,
     });
   };
 

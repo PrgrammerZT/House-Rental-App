@@ -43,9 +43,8 @@ export default class HouseList extends React.PureComponent {
 
   showHouse = async () => {
     const data = await this.searchHouseList();
-    const HouseSource = data.body;
 
-    const { list, count } = HouseSource;
+    const { list, count } = data;
 
     this.setState({
       list,
@@ -76,7 +75,7 @@ export default class HouseList extends React.PureComponent {
     const value = res[0].value;
     const { filters } = this.state;
     // debugger;
-    const { data } = await request.get("/houses", {
+    const data = await request.get("/houses", {
       params: {
         cityId: value,
         ...filters,
@@ -108,8 +107,8 @@ export default class HouseList extends React.PureComponent {
           },
         })
         .then(async (res) => {
-          const { data } = res;
-          const newList = [...this.state.list, ...data.body.list];
+          const data = res;
+          const newList = [...this.state.list, ...data.list];
           await this.setState({
             list: newList,
           });
@@ -141,7 +140,7 @@ export default class HouseList extends React.PureComponent {
           desc={house.desc}
           title={house.title}
           price={house.price}
-          code={house.houseCode}
+          houseCode={house.houseCode}
           tags={house.tags}
         ></HouseItems>
       );

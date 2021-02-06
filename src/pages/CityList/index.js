@@ -1,6 +1,6 @@
 import React from "react";
 import { NavBar, Icon, Toast } from "antd-mobile";
-import axios from "axios";
+import request from "../../utils/request";
 import "./index.css";
 import { getCurrentCity } from "../../utils";
 import { List, AutoSizer } from "react-virtualized";
@@ -61,17 +61,14 @@ export default class CityList extends React.PureComponent {
     };
   };
   async getCityList() {
-    const { data } = await axios.get("http://localhost:8080/area/city", {
+    const data = await request.get("/area/city", {
       params: { level: 1 },
     });
 
-    const { body } = data;
-
-    const { cityList, cityIndex } = this.formatCityList(body);
+    const { cityList, cityIndex } = this.formatCityList(data);
 
     //获取热门数据
-    const res = await axios.get("http://localhost:8080/area/hot");
-    const hotres = res.data.body;
+    const hotres = await request.get("/area/hot");
 
     cityList["hot"] = hotres;
     cityIndex.unshift("hot");
