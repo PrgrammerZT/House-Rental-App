@@ -30,11 +30,21 @@ export default class Filter extends Component {
   onCancel = (type) => {
     //Cancel的时候
     //type正确 但是要拿到selectedObj
+    //逻辑 点了取消以后 我们要返回其上一次的状态 而不是和确定一样
     const { selectedValues } = this.state;
     let selectedObj = {};
+    //点击取消和清除是不同的
+    //取消指的是返回上一次的状态
+    //清除指的是全都没了
     if (type === "more") {
       selectedObj = selectedValues[type];
+      //清除more数组
+      const newselectedValues = { ...selectedValues, more: [] };
+      this.setState({ selectedValues: newselectedValues });
     } else {
+      //其他情况应该返回上一次的状态 具体来说就是不改变原有的selectedValues;
+      console.log("非more的情况");
+      console.log(selectedValues);
       selectedObj = selectedValues;
     }
     const newTitledSelectedStatus = this.checkIfHighLight(selectedObj, type);
@@ -42,6 +52,9 @@ export default class Filter extends Component {
       openType: "",
       titleSelectedStatus: newTitledSelectedStatus,
     });
+
+    //强制刷新数据
+    this.filterForData(this.state.selectedValues);
   };
 
   //辅助方法 判断是否应该高亮

@@ -90,11 +90,11 @@ export default class FilterMore extends Component {
         <FilterFooter
           className={styles.footer}
           cancelText="清除"
-          onCancel={() => {
+          onCancel={async () => {
             //把type写死 因为只有这一个 需要更改的是父组件内more的状态 否则没有用
             this.setState({ selectedValue: [] });
             //...需要改变父级状态 否则清除没有效果
-            changeSelected([]);
+            await changeSelected([]);
 
             //这里的onCancel的名字叫做onleave
             onleave(type);

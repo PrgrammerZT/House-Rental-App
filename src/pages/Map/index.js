@@ -5,6 +5,7 @@ import { getCurrentCity } from "../../utils";
 import styles from "./index.module.css";
 import { Link } from "react-router-dom";
 import BASE_URL from "../../utils/url";
+import HouseItems from "../../components/HouseItems";
 async function getCity() {
   const res = await getCurrentCity();
   return { label: res[0].label, value: res[0].value };
@@ -220,38 +221,6 @@ export default class Map extends React.PureComponent {
     });
   }
 
-  renderHouseList = () => {
-    return this.state.houseList.map((item) => {
-      return (
-        <div className={styles.house} key={item.houseImg}>
-          <div className={styles.imgWrap}>
-            <img className={styles.img} src={BASE_URL + item.houseImg} alt="" />
-          </div>
-          <div className={styles.content}>
-            <h3 className={styles.title}>{item.title}</h3>
-            <div className={styles.desc}>{item.desc}</div>
-            <div>
-              {item.tags.map((item, index) => {
-                const title = `tag${index + 1}`;
-                return (
-                  <span
-                    className={[styles.tag, styles[title]].join(" ")}
-                    key={item}
-                  >
-                    {item}
-                  </span>
-                );
-              })}
-            </div>
-            <div className={styles.price}>
-              <span className={styles.priceNum}>{item.price}</span> 元/月
-            </div>
-          </div>
-        </div>
-      );
-    });
-  };
-
   renderHouseBottom = () => {};
   render() {
     return (
@@ -271,7 +240,19 @@ export default class Map extends React.PureComponent {
               更多房源
             </Link>
           </div>
-          <div className={styles.houseItems}>{this.renderHouseList()}</div>
+          <div className={styles.houseItems}>
+            {this.state.houseList.map((item) => {
+              return (
+                <HouseItems
+                  houseImg={item.houseImg}
+                  tags={item.tags}
+                  title={item.title}
+                  desc={item.desc}
+                  price={item.price}
+                ></HouseItems>
+              );
+            })}
+          </div>
         </div>
       </div>
     );

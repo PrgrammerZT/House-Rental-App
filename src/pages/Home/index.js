@@ -24,10 +24,12 @@ export default class Home extends React.PureComponent {
     groups: [],
     news: [],
     city: "上海",
+    cityVal: "",
   };
   async getNews() {
+    console.log(this.state.cityVal);
     const { data } = await request.get("/home/news", {
-      params: { area: "AREA%7C88cff55c-aaa4-e2e0" },
+      params: { area: this.state.cityVal },
     });
 
     const { body } = data;
@@ -39,7 +41,7 @@ export default class Home extends React.PureComponent {
   }
   async getGroup() {
     const { data } = await request.get("/home/groups", {
-      params: { area: "AREA%7C88cff55c-aaa4-e2e0" },
+      params: { area: this.state.cityVal },
     });
 
     const { body } = data;
@@ -59,14 +61,15 @@ export default class Home extends React.PureComponent {
   }
 
   componentDidMount() {
-    this.getData();
-    this.getGroup();
-    this.getNews();
-
-    getCurrentCity().then((res) => {
-      this.setState({
+    getCurrentCity().then(async (res) => {
+      await this.setState({
         city: res[0].label,
+        cityVal: res[0].value,
       });
+
+      this.getData();
+      this.getGroup();
+      this.getNews();
     });
   }
   render() {

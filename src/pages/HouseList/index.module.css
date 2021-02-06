@@ -24,3 +24,14 @@
 .header :global(.search) {
   height: 30px;
 }
+
+.houseItems {
+  padding: 0 15px;
+}
+
+.loadingHolder {
+  background-color: #333333;
+  width: 100%;
+  height: 120px;
+  line-height: 120px;
+}

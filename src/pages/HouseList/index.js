@@ -2,38 +2,40 @@ import { Flex } from "antd-mobile";
 import React from "react";
 import SearchHeader from "../../components/SearchHeader";
 import { getCurrentCity } from "../../utils";
+import HouseItems from "../../components/HouseItems";
 import styles from "./index.module.css";
 import Filter from "./components/Filter";
 import request from "../../utils/request";
+import {
+  List,
+  AutoSizer,
+  WindowScroller,
+  InfiniteLoader,
+} from "react-virtualized";
 export default class HouseList extends React.PureComponent {
   state = {
     city: "",
     list: [],
     count: 0,
+    //初始化数据 挂载到整个类上
+    filters: {},
   };
-
-  //初始化数据
-  filters = {};
 
   getCity = async () => {
     const result = await getCurrentCity();
     return result[0].label;
   };
-  async componentDidMount() {
+  componentDidMount = async () => {
     const city = await this.getCity();
     this.setState({
       city,
     });
 
-    //进入页面时就要获取数据
-    this.searchHouseList();
-  }
+    //进入页面时就要获取数据并且展示数据
+    this.showHouse();
+  };
 
-  onFilters = async (filters) => {
-    //封装为一个全局变量
-    this.filters = filters;
-    // debugger;
-
+  showHouse = async () => {
     const data = await this.searchHouseList();
     const HouseSource = data.body;
 
@@ -44,20 +46,90 @@ export default class HouseList extends React.PureComponent {
     });
   };
 
+  onFilters = async (filters) => {
+    //封装为一个全局变量
+    await this.setState({
+      filters,
+    });
+    //展示房屋
+    console.log(this.state.filters);
+    this.showHouse();
+  };
+
   searchHouseList = async () => {
     //通过HouseList搜索
     const res = await getCurrentCity();
     const value = res[0].value;
+    const { filters } = this.state;
     const { data } = await request.get("/houses", {
       params: {
         cityId: value,
-        ...this.filters,
+        ...filters,
         start: 1,
         end: 20,
       },
     });
 
     return data;
+  };
+
+  isRowLoaded = ({ index }) => {
+    //判断列表中的每一行是否加载完成
+    return this.state.list[index];
+  };
+
+  loadMoreRows = async ({ startIndex, stopIndex }) => {
+    const res = await getCurrentCity();
+    const cityId = res[0].value;
+    return new Promise((resolve, reject) => {
+      const { filters } = this.state;
+      request
+        .get("/houses", {
+          params: {
+            cityId,
+            ...filters,
+            start: startIndex,
+            end: startIndex + 20,
+          },
+        })
+        .then(async (res) => {
+          const { data } = res;
+          const newList = [...this.state.list, ...data.body.list];
+          await this.setState({
+            list: newList,
+          });
+          resolve();
+        });
+    });
+  };
+
+  rowRender = ({
+    key, // Unique key within array of rows
+    index, // 索引号
+    style, // 样式 指定每一行在哪个位置
+  }) => {
+    const { list } = this.state;
+    const house = list[index];
+    if (house) {
+      return (
+        <HouseItems
+          key={key}
+          style={style}
+          houseImg={house.houseImg}
+          desc={house.desc}
+          title={house.title}
+          price={house.price}
+          code={house.houseCode}
+          tags={house.tags}
+        ></HouseItems>
+      );
+    }
+    //渲染一个占位符
+    else {
+      <div key={key} style={style}>
+        <p className={styles.loadingHolder}></p>
+      </div>;
+    }
   };
 
   render() {
@@ -77,6 +149,46 @@ export default class HouseList extends React.PureComponent {
           ></SearchHeader>
         </Flex>
         <Filter onFilter={this.onFilters}></Filter>
+        <div className={styles.houseItems}>
+          {/* InfiniteLoader */}
+          <InfiniteLoader
+            isRowLoaded={this.isRowLoaded}
+            loadMoreRows={this.loadMoreRows}
+            rowCount={this.state.count}
+          >
+            {({ onRowsRendered, registerChild }) => {
+              {
+                /* 渲染结构 */
+              }
+              return (
+                <WindowScroller>
+                  {({ height, isScrolling, scrollTop }) => {
+                    return (
+                      <AutoSizer>
+                        {({ width }) => {
+                          return (
+                            <List
+                              autoHeight //这是真正的高度 设置为windowScroller的高度
+                              width={width} //视口的高度
+                              height={height} //视口的宽度
+                              rowCount={this.state.count}
+                              rowHeight={120} /**每一行的高度 */
+                              rowRenderer={this.rowRender}
+                              isScrolling={isScrolling}
+                              scrollTop={scrollTop}
+                              onRowsRendered={onRowsRendered}
+                              ref={registerChild}
+                            />
+                          );
+                        }}
+                      </AutoSizer>
+                    );
+                  }}
+                </WindowScroller>
+              );
+            }}
+          </InfiniteLoader>
+        </div>
       </div>
     );
   }
