@@ -25,7 +25,7 @@ function SearchHeader(props) {
         <div
           className="form"
           onClick={() => {
-            props.history.push("/search");
+            // props.history.push("/search");
           }}
         >
           <i className="iconfont icon-seach" />

@@ -47,6 +47,7 @@ export default class HouseList extends React.PureComponent {
   };
 
   onFilters = async (filters) => {
+    console.log("filter update");
     //封装为一个全局变量
     await this.setState({
       filters,
@@ -61,6 +62,7 @@ export default class HouseList extends React.PureComponent {
     const res = await getCurrentCity();
     const value = res[0].value;
     const { filters } = this.state;
+    debugger;
     const { data } = await request.get("/houses", {
       params: {
         cityId: value,

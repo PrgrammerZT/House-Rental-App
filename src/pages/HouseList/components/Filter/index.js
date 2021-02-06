@@ -27,7 +27,7 @@ export default class Filter extends Component {
     selectedValues: {},
   };
   //隐藏对话框
-  onCancel = (type) => {
+  onCancel = async (type) => {
     //Cancel的时候
     //type正确 但是要拿到selectedObj
     //逻辑 点了取消以后 我们要返回其上一次的状态 而不是和确定一样
@@ -40,7 +40,9 @@ export default class Filter extends Component {
       selectedObj = selectedValues[type];
       //清除more数组
       const newselectedValues = { ...selectedValues, more: [] };
-      this.setState({ selectedValues: newselectedValues });
+      await this.setState({ selectedValues: newselectedValues });
+      //强制刷新数据
+      this.props.onFilter(this.filterForData(this.state.selectedValues));
     } else {
       //其他情况应该返回上一次的状态 具体来说就是不改变原有的selectedValues;
       console.log("非more的情况");
@@ -52,9 +54,6 @@ export default class Filter extends Component {
       openType: "",
       titleSelectedStatus: newTitledSelectedStatus,
     });
-
-    //强制刷新数据
-    this.filterForData(this.state.selectedValues);
   };
 
   //辅助方法 判断是否应该高亮
@@ -137,9 +136,10 @@ export default class Filter extends Component {
     databag[areakey] = areaValue;
 
     //方式和租金可以直接拿第一项 因为它只有一项
-    databag["mode"] = mode[0];
-    databag["price"] = price[0];
-
+    databag["rentType"] = mode[0];
+    //这里就取一个数字
+    const price_num = price[0].substring(6);
+    databag["price"] = price_num;
     //更多是一个字符串 我们要用逗号分割 但它是一整个字符串
     databag["more"] = more.join(",");
 
