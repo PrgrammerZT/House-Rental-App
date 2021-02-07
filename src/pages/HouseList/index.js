@@ -57,7 +57,8 @@ export default class HouseList extends React.PureComponent {
     //进入页面时就要获取数据并且展示数据
     await this.showHouse();
 
-    this.sticky.current.handleListPadding();
+    //这个做完之后 我们再干别的
+    await this.sticky.current.handleListPadding();
   };
 
   showHouse = async () => {
@@ -65,7 +66,7 @@ export default class HouseList extends React.PureComponent {
     const { list, count } = data;
     if (count !== 0) {
       //加载提示
-      Toast.info("共找到" + count + "条房源", 2, null, true);
+      Toast.info("共找到" + count + "条房源", 1.5, null, true);
     }
     this.setState((state) => {
       return {
@@ -215,7 +216,7 @@ export default class HouseList extends React.PureComponent {
                                 width={width} //视口的高度
                                 height={height} //视口的宽度
                                 rowCount={this.state.count}
-                                rowHeight={120} /**每一行的高度 */
+                                rowHeight={130} /**每一行的高度 */
                                 rowRenderer={this.rowRender}
                                 isScrolling={isScrolling}
                                 scrollTop={scrollTop}

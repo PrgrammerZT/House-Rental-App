@@ -1,21 +1,23 @@
+.itemWrapper {
+}
 .house {
-  height: 120px;
-  position: relative;
+  height: 130px;
   box-sizing: border-box;
   justify-content: space-around;
-  padding-top: 18px;
   border-bottom: 1px solid #e5e5e5;
+  /* 因为是绝对定位在react-virtualized-list中 所以是不起效果的margin 绝对定位相关的都不能碰到,因此只有padding-top*/
+  padding-top: 20px;
 }
 
 .imgWrap {
   float: left;
   width: 106px;
-  height: 80px;
+  height: 90px;
 }
 
 .img {
   width: 106px;
-  height: 80px;
+  height: 90px;
 }
 
 .content {

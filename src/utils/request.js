@@ -7,7 +7,7 @@ const service = axios.create({
 });
 
 service.interceptors.request.use((config) => {
-  Toast.loading("加载中...", 0, null, true);
+  // Toast.loading("加载中...", 0, null, true);
   service.isLoading = true;
   // config.headers["authorization"] = getToken() || "";
   return config;
@@ -15,7 +15,7 @@ service.interceptors.request.use((config) => {
 
 service.interceptors.response.use((response) => {
   service.isLoading = false;
-  Toast.hide();
+  // Toast.hide();
 
   return Promise.resolve(response.data.body);
 });

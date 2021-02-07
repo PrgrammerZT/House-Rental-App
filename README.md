@@ -10,13 +10,13 @@
 
 > ### 待解决
 
-- 1.cityList 中点击#和 z 无法高亮对应的标签
+- 1.cityList 中点击#和 z 无法高亮对应的标签 **暂不解决 这和浏览器的抖动有关**
 - 2.如何等待 React-Virtualized-List 列表项的完全加载问题 **已解决**
-- 3.找到房源的提示时有时无
+- 3.找到房源的提示时有时无 **axios 的 Toast.Hide()使得其出现问题 已解决**
 - 4.没有一个好的 favicon.ico
-- 5.tag 标签过多,超过一排时会引起样式错乱
+- 5.tag 标签过多,超过一排时会引起样式错乱 **已解决**
 - 6.map 和首页不能携带参数跳转到 houseList **已解决**
-- 7.地铁不限的情况无法获取房源
+- 7.地铁不限的情况无法获取房源 **接口问题 无法解决**
 
 > ### 推测原因
 
@@ -27,8 +27,8 @@
 - 2.通过给组件设置 ref,父组件完全渲染后,再调用子组件的方法
 - 3.完全渲染的意思是 ComponentDidMount 函数中调用
 - 4.注意的是 render 方法会在每次状态改变后执行,无论是父组件还是子组件
-
+- 5.是因为样式的问题 我们发现 React 在样式上如果搭配了如 react-virtualized-list 就不好操作,因为它通过绝对定位实现样式,注意不用 absolute 相关的 style
 - 6.可以通过 react-router-dom 中的 state 解决问题 但是清除 state 的时候不知道怎么办
 - #### 使用动态路由和 match 解决这个问题 也不清楚如何清除 state
 - #### 尝试使用 history.replace() 但是我们从 city 界面回来的时候会使用 history.go 这个 API,就会回到 state 仍存在的地方 好像是这样的
-- #### 建议使用 history.replace() 代替 history.push 这个 API
+- #### 建议使用 history.replace() 代替 history.push 这个 API (我们替换了所有的 HomeTab 切换使用 replace)
