@@ -46,15 +46,16 @@ export default class HouseList extends React.PureComponent {
 
     const { list, count } = data;
 
-    this.setState({
-      list,
-      count,
+    this.setState((state) => {
+      if (count !== 0) {
+        //加载提示
+        Toast.info(`共找到${count}条房源`, 1, null, true);
+      }
+      return {
+        list,
+        count,
+      };
     });
-
-    if (this.state.count !== 0) {
-      //加载提示
-      Toast.info(`共找到${count}条房源`, 1.5, null, true);
-    }
   };
 
   onFilters = async (filters) => {
@@ -66,7 +67,7 @@ export default class HouseList extends React.PureComponent {
     //展示房屋
     console.log(this.state.filters);
     window.scrollTo(0, 0);
-    this.showHouse();
+    await this.showHouse();
   };
 
   searchHouseList = async () => {

@@ -16,18 +16,23 @@ export default class Sticky extends React.PureComponent {
     }
     //dom对象的方法 DOM对象找到距离顶部的top值 和scroll被卷起的头部是不同的
     const rectObj = placeholderEL.getBoundingClientRect();
+    //console.log(rectObj);
     if (rectObj.top <= 0) {
       contentEL.classList.add(styles.sticky);
       //占位 但是被z-index为1的覆盖
       //根据props传递过来height
       placeholderEL.style.height = this.props.height + "px";
-      this.virtual_list.classList.remove(styles.ptlist);
+      if (this.virtual_list) {
+        this.virtual_list.classList.remove(styles.ptlist);
+      }
     } else {
       //不吸顶
       contentEL.classList.remove(styles.sticky);
       //占位 但是被z-index为1的覆盖
       placeholderEL.style.height = "0px";
-      this.virtual_list.classList.add(styles.ptlist);
+      if (this.virtual_list) {
+        this.virtual_list.classList.add(styles.ptlist);
+      }
     }
   };
   componentWillUnmount() {
