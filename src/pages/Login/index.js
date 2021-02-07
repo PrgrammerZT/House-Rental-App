@@ -8,6 +8,7 @@ import styles from "./index.module.scss";
 import request from "../../utils/request";
 import { ErrorMessage, Field, Form, withFormik } from "formik";
 import * as Yup from "yup";
+import { setToken } from "../../utils/token";
 // 验证规则：
 const REG_UNAME = /^[a-zA-Z_\d]{5,8}$/;
 const REG_PWD = /^[a-zA-Z_\d]{5,12}$/;
@@ -82,8 +83,9 @@ export default withFormik({
       Toast.info("用户名或密码错误~");
     } else {
       //登录成功
-      localStorage.setItem("hkzf_id", data.token);
-      props.history.go(-1);
+      setToken(data.token);
+      //使用replace 不要让用户重新登录
+      props.history.replace("/home/profile");
     }
   },
   //表单校验规则
