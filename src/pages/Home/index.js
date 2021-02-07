@@ -11,10 +11,40 @@ import { getCurrentCity } from "../../utils";
 import SearchHeader from "../../components/SearchHeader";
 
 const navItem = [
-  { img: Nav1, title: "整租", to: { path: "/home/houselist" } },
-  { img: Nav2, title: "合租", to: { path: "/home/houselist" } },
-  { img: Nav3, title: "地图找房", to: { path: "/map", params: "" } },
-  { img: Nav4, title: "去出租", to: { path: "", params: "", disabled: true } },
+  {
+    img: Nav1,
+    title: "整租",
+    to: {
+      path: "/home/houselist",
+      state: {
+        area: "",
+        rentType: "true",
+        price: "",
+        more: "",
+      },
+    },
+  },
+  {
+    img: Nav2,
+    title: "合租",
+    to: {
+      path: "/home/houselist",
+      state: {
+        area: "",
+        rentType: "false",
+        price: "",
+        more: "",
+      },
+    },
+  },
+  {
+    img: Nav3,
+    title: "地图找房",
+    to: {
+      path: "/map",
+    },
+  },
+  { img: Nav4, title: "去出租", to: { path: "", state: "", disabled: true } },
 ];
 
 export default class Home extends React.PureComponent {
@@ -101,7 +131,7 @@ export default class Home extends React.PureComponent {
                   if (item.to.disabled) {
                     Toast.info("功能尚未实现 敬请期待", 1.5, null, false);
                   } else {
-                    this.props.history.push(item.to.path);
+                    this.props.history.replace(item.to.path, item.to.state);
                   }
                 }}
               >

@@ -14,8 +14,9 @@ service.interceptors.request.use((config) => {
 });
 
 service.interceptors.response.use((response) => {
-  Toast.hide();
   service.isLoading = false;
+  Toast.hide();
+
   return Promise.resolve(response.data.body);
 });
 

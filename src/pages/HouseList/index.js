@@ -14,6 +14,7 @@ import {
   InfiniteLoader,
 } from "react-virtualized";
 import Sticky from "../../components/Sticky";
+import { isNumber } from "lodash";
 export default class HouseList extends React.PureComponent {
   state = {
     city: "",
@@ -23,7 +24,7 @@ export default class HouseList extends React.PureComponent {
     filters: {
       area: "",
       mode: null,
-      price: 0,
+      price: "",
       more: [],
     },
   };
@@ -37,9 +38,21 @@ export default class HouseList extends React.PureComponent {
 
   componentDidMount = async () => {
     const city = await this.getCity();
-    this.setState({
-      city,
-    });
+    // filter的获取;
+    let filters = this.props.location.state;
+    console.log(filters);
+    if (filters) {
+      this.setState({
+        filters,
+        city,
+      });
+
+      //通知filters组件更新状态
+    } else {
+      this.setState({
+        city,
+      });
+    }
 
     //进入页面时就要获取数据并且展示数据
     await this.showHouse();
@@ -49,14 +62,12 @@ export default class HouseList extends React.PureComponent {
 
   showHouse = async () => {
     const data = await this.searchHouseList();
-
     const { list, count } = data;
-
+    if (count !== 0) {
+      //加载提示
+      Toast.info("共找到" + count + "条房源", 2, null, true);
+    }
     this.setState((state) => {
-      if (count !== 0) {
-        //加载提示
-        Toast.info(`共找到${count}条房源`, 1, null, true);
-      }
       return {
         list,
         count,
@@ -82,6 +93,7 @@ export default class HouseList extends React.PureComponent {
     const value = res[0].value;
     const { filters } = this.state;
     // debugger;
+    console.log(filters, value);
     const data = await request.get("/houses", {
       params: {
         cityId: value,
@@ -90,7 +102,7 @@ export default class HouseList extends React.PureComponent {
         end: 20,
       },
     });
-    console.log(data);
+    console.log("data", data);
     return data;
   };
 

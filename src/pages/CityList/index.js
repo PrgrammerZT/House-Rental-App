@@ -12,7 +12,7 @@ const formatCityIndex = (letter) => {
   let returnLetter = "";
   switch (letter) {
     case "#":
-      returnLetter = "默认定位";
+      returnLetter = "当前城市";
       break;
     case "hot":
       returnLetter = "热门城市";

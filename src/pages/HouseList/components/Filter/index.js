@@ -8,6 +8,7 @@ import styles from "./index.module.css";
 import { getCurrentCity } from "../../../../utils";
 import { isEqual } from "lodash";
 import { Spring } from "react-spring/renderprops";
+import { withRouter } from "react-router-dom";
 const titleSelectedStatus = {
   area: false,
   mode: false,
@@ -21,7 +22,7 @@ const defaultValues = {
   price: ["null"],
   more: [],
 };
-export default class Filter extends Component {
+class Filter extends Component {
   state = {
     titleSelectedStatus,
     openType: "",
@@ -321,15 +322,38 @@ export default class Filter extends Component {
     });
   };
 
+  componentWillUnmount() {
+    //delete一个属性
+    //delete this.props.match.params.filters;
+    //console.log("filter unmount");
+  }
+
   async componentDidMount() {
     await this.getFilterData();
+    //根据location的state判断这里的高亮
+    //页面卸载的时候去除state
+    const filterDefaultSelect = this.props.location.state;
+    if (filterDefaultSelect) {
+      //有值
+      console.log(filterDefaultSelect);
+      if (isEqual(filterDefaultSelect.rentType, "true")) {
+        defaultValues.mode = ["true"];
+      } else {
+        defaultValues.mode = ["false"];
+      }
+
+      const newTitledSelectedStatus = { ...this.state.titleSelectedStatus };
+      newTitledSelectedStatus["mode"] = true;
+      this.setState({
+        titleSelectedStatus: newTitledSelectedStatus,
+      });
+    }
     this.setState({
       selectedValues: defaultValues,
     });
 
     //拿到body
     this.htmlbody = document.body;
-    //更改padding值
   }
 
   renderFilterMore = () => {
@@ -376,3 +400,5 @@ export default class Filter extends Component {
     );
   }
 }
+
+export default withRouter(Filter);

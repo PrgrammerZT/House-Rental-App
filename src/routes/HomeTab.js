@@ -71,7 +71,7 @@ export default class HomeTab extends React.PureComponent {
                     selectedTab: item.route,
                   });
 
-                  this.props.history.push(item.route);
+                  this.props.history.replace(item.route);
                 }}
               ></TabBar.Item>
             );
