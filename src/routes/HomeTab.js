@@ -1,12 +1,12 @@
-import React from "react";
+import React, { Suspense } from "react";
 //1.导入路由
 import { Redirect, Route, Switch } from "react-router-dom";
 import { TabBar } from "antd-mobile";
 import Home from "../pages/Home";
 //因为需要HouseList的样式覆盖Home组件的样式
-import HouseList from "../pages/HouseList";
-import News from "../pages/News";
-import Profile from "../pages/Profile";
+const HouseList = React.lazy(() => import("../pages/HouseList"));
+const News = React.lazy(() => import("../pages/News"));
+const Profile = React.lazy(() => import("../pages/Profile"));
 
 const Tabs = [
   { title: "首页", icon: "icon-house", route: "/home/index" },
@@ -33,30 +33,36 @@ export default class HomeTab extends React.PureComponent {
   render() {
     return (
       <div className="home" style={{ paddingBottom: 50 }}>
-        <Switch>
-          <Route path="/home/news" component={News} exact={true}></Route>
-          <Route path="/home/profile" component={Profile} exact={true}></Route>
-          <Route
-            path="/home/houselist"
-            component={HouseList}
-            exact={true}
-          ></Route>
-          <Route path="/home/index" component={Home} exact={true}></Route>
-          {/* 不能重定向超过两次 */}
-          <Route
-            path="/home"
-            render={() => <Redirect to="/home/index"></Redirect>}
-            exact={true}
-          ></Route>
-          <Route path="*" render={() => <h1>Page Not Found 404</h1>}></Route>
-        </Switch>
+        <Suspense fallback={<div>Loading</div>}>
+          <Switch>
+            <Route path="/home/news" component={News} exact={true}></Route>
+            <Route
+              path="/home/profile"
+              component={Profile}
+              exact={true}
+            ></Route>
+            <Route
+              path="/home/houselist"
+              component={HouseList}
+              exact={true}
+            ></Route>
+            <Route path="/home/index" component={Home} exact={true}></Route>
+            {/* 不能重定向超过两次 */}
+            <Route
+              path="/home"
+              render={() => <Redirect to="/home/index"></Redirect>}
+              exact={true}
+            ></Route>
+            <Route path="*" render={() => <h1>Page Not Found 404</h1>}></Route>
+          </Switch>
+        </Suspense>
         {/* 把TabBar放在这 */}
         <TabBar
           unselectedTintColor="#888"
           tintColor="#21b97a"
           barTintColor="white"
           noRenderContent={true}
-          prerenderingSiblingsNumber={0}
+          prerenderingSiblingsNumber={Infinity}
         >
           {Tabs.map((item) => {
             return (
