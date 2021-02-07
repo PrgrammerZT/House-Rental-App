@@ -1,5 +1,5 @@
 import React from "react";
-import { Flex, Carousel, Grid, WingBlank } from "antd-mobile";
+import { Flex, Carousel, Grid, WingBlank, Toast } from "antd-mobile";
 import request from "../../utils/request";
 import Nav1 from "../../assets/images/nav-1.png";
 import Nav2 from "../../assets/images/nav-2.png";
@@ -11,10 +11,10 @@ import { getCurrentCity } from "../../utils";
 import SearchHeader from "../../components/SearchHeader";
 
 const navItem = [
-  { img: Nav1, title: "整租" },
-  { img: Nav2, title: "合租" },
-  { img: Nav3, title: "地图找房" },
-  { img: Nav4, title: "去出租" },
+  { img: Nav1, title: "整租", to: { path: "/home/houselist" } },
+  { img: Nav2, title: "合租", to: { path: "/home/houselist" } },
+  { img: Nav3, title: "地图找房", to: { path: "/map", params: "" } },
+  { img: Nav4, title: "去出租", to: { path: "", params: "", disabled: true } },
 ];
 
 export default class Home extends React.PureComponent {
@@ -98,7 +98,11 @@ export default class Home extends React.PureComponent {
               <Flex.Item
                 key={item.title}
                 onClick={() => {
-                  this.props.history.push("/home/houselist");
+                  if (item.to.disabled) {
+                    Toast.info("功能尚未实现 敬请期待", 1.5, null, false);
+                  } else {
+                    this.props.history.push(item.to.path);
+                  }
                 }}
               >
                 <img src={item.img}></img>

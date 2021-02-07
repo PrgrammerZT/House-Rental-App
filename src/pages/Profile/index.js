@@ -1,9 +1,8 @@
 import React from "react";
 import BASE_URL from "../../utils/url";
 import { Link } from "react-router-dom";
-import { Button, Grid } from "antd-mobile";
+import { Button, Grid, Modal } from "antd-mobile";
 import { getToken, isAuth, removeToken } from "../../utils/token";
-import { Modal } from "ppfish-mobile";
 import request from "../../utils/request";
 import styles from "./index.module.scss";
 // 菜单数据
@@ -64,7 +63,7 @@ export default class Profile extends React.PureComponent {
             removeToken();
             //改变状态
             this.setState({
-              isLoading: false,
+              isLogin: false,
               userInfo: {
                 nickname: "",
                 avatar: "",
@@ -86,7 +85,7 @@ export default class Profile extends React.PureComponent {
     const { isLogin, userInfo } = this.state;
     let nickname = "游客";
     let avatar = DEFAULT_AVATAR;
-    if (userInfo) {
+    if (userInfo && userInfo.avatar && userInfo.avatar.length != 0) {
       nickname = userInfo.nickname;
       avatar = BASE_URL + userInfo.avatar;
     }

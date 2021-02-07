@@ -20,7 +20,12 @@ export default class HouseList extends React.PureComponent {
     list: [],
     count: 0,
     //初始化数据 挂载到整个类上
-    filters: {},
+    filters: {
+      area: "",
+      mode: null,
+      price: 0,
+      more: [],
+    },
   };
 
   sticky = createRef();
@@ -38,6 +43,7 @@ export default class HouseList extends React.PureComponent {
 
     //进入页面时就要获取数据并且展示数据
     await this.showHouse();
+
     this.sticky.current.handleListPadding();
   };
 
@@ -84,7 +90,7 @@ export default class HouseList extends React.PureComponent {
         end: 20,
       },
     });
-
+    console.log(data);
     return data;
   };
 

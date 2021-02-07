@@ -4,7 +4,6 @@ import App from "./App";
 
 // 引入antd和ppfish 对比antd和ppfish的使用
 import "antd-mobile/dist/antd-mobile.min.css";
-import "ppfish-mobile/dist/ppfish-mobile.min.css";
 //需要把自己写的样式放在他写的样式后面
 import "./index.css";
 //导入字体图标库

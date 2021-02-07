@@ -44,6 +44,10 @@ export default class Sticky extends React.PureComponent {
     this.eventid = window.addEventListener("scroll", this.handleScroll);
   }
 
+  componentDidUpdate() {
+    this.handleListPadding();
+  }
+
   //让父组件来调用这个方法就得了
   handleListPadding = () => {
     //当页面加载完成后 再使用
@@ -51,9 +55,11 @@ export default class Sticky extends React.PureComponent {
       "ReactVirtualized__List"
     )[0];
 
-    //一开始没有scroll就要添加样式
-    this.virtual_list.classList.add(styles.ptlist);
-    this.virtual_list.classList.add(styles.pblist);
+    if (this.virtual_list) {
+      //一开始没有scroll就要添加样式
+      this.virtual_list.classList.add(styles.ptlist);
+      this.virtual_list.classList.add(styles.pblist);
+    }
   };
 
   componentWillUnmount() {
