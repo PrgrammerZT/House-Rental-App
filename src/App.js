@@ -8,11 +8,11 @@ import {
 
 //导入懒加载页面 但是首页就不必了
 import HomeTab from "./routes/HomeTab";
-const CityList = React.lazy(() => import("./pages/CityList"));
-const map = React.lazy(() => import("./pages/Map"));
-const HouseDetail = React.lazy(() => import("./pages/HouseDetail"));
-const Login = React.lazy(() => import("./pages/Login"));
-const Register = React.lazy(() => import("./pages/Register"));
+import CityList from "./pages/CityList";
+import map from "./pages/Map";
+import HouseDetail from "./pages/HouseDetail";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 class App extends React.PureComponent {
   render() {
     return (

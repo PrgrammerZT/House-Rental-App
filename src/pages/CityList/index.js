@@ -84,7 +84,7 @@ export default class CityList extends React.PureComponent {
 
     //初始化cityOffset
     const cityOffset = this.getCityOffset(cityIndex, cityList);
-    console.log(cityOffset);
+    // console.log(cityOffset);
     this.setState({
       cityList,
       cityIndex,
@@ -118,7 +118,7 @@ export default class CityList extends React.PureComponent {
 
   changeCity = ({ label, value }) => {
     const city = ["北京", "上海", "广州", "深圳"];
-    console.log(label);
+    // console.log(label);
     const isfind = city.indexOf(label);
     if (isfind > -1) {
       localStorage.setItem("hkzf_city", JSON.stringify({ label, value }));

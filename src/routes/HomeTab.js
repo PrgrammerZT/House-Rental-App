@@ -4,9 +4,9 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import { TabBar } from "antd-mobile";
 import Home from "../pages/Home";
 //因为需要HouseList的样式覆盖Home组件的样式
-const HouseList = React.lazy(() => import("../pages/HouseList"));
-const News = React.lazy(() => import("../pages/News"));
-const Profile = React.lazy(() => import("../pages/Profile"));
+import HouseList from "../pages/HouseList";
+import News from "../pages/News";
+import Profile from "../pages/Profile";
 
 const Tabs = [
   { title: "首页", icon: "icon-house", route: "/home/index" },

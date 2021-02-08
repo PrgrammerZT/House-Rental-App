@@ -52,8 +52,8 @@ class Filter extends Component {
       }
     } else {
       //其他情况应该返回上一次的状态 具体来说就是不改变原有的selectedValues;
-      console.log("非more的情况");
-      console.log(selectedValues);
+      // console.log("非more的情况");
+      // console.log(selectedValues);
       selectedObj = selectedValues;
     }
     const newTitledSelectedStatus = this.checkIfHighLight(selectedObj, type);
@@ -66,7 +66,7 @@ class Filter extends Component {
   //辅助方法 判断是否应该高亮
   checkIfHighLight = (selectedObj, type) => {
     console.log(selectedObj);
-    console.log("type---" + type);
+    // console.log("type---" + type);
     const { titleSelectedStatus } = this.state;
     const newTitledSelectedStatus = { ...titleSelectedStatus };
     if (type !== "more") {

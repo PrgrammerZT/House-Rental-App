@@ -57,7 +57,7 @@ export default class Home extends React.PureComponent {
     cityVal: "",
   };
   async getNews() {
-    console.log(this.state.cityVal);
+    // console.log(this.state.cityVal);
     const data = await request.get("/home/news", {
       params: { area: this.state.cityVal },
     });
