@@ -37,7 +37,7 @@ export default class Profile extends React.PureComponent {
   };
   async getUserInfo() {
     const token = getToken();
-    console.log(token);
+    // console.log(token);
     const data = await request.get("/user", {
       headers: { authorization: token },
     });
@@ -46,7 +46,7 @@ export default class Profile extends React.PureComponent {
       userInfo: data,
     });
 
-    console.log(data);
+    // console.log(data);
   }
   logout = () => {
     //logout

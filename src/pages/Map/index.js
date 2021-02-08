@@ -6,6 +6,7 @@ import styles from "./index.module.css";
 import { Link } from "react-router-dom";
 import BASE_URL from "../../utils/url";
 import HouseItems from "../../components/HouseItems";
+import { Toast } from "antd-mobile";
 async function getCity() {
   const res = await getCurrentCity();
   return { label: res[0].label, value: res[0].value };
@@ -22,9 +23,12 @@ export default class Map extends React.PureComponent {
 
   //获取覆盖物的信息
   getRenderInfo = async (id) => {
+    Toast.loading("加载中", 0);
     const { data } = await axios.get("http://localhost:8080/area/map", {
       params: { id },
     });
+
+    Toast.hide();
 
     return data.body;
   };

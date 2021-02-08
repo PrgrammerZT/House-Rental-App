@@ -83,7 +83,7 @@ export default class HouseList extends React.PureComponent {
       filters,
     });
     //展示房屋
-    console.log(this.state.filters);
+    // console.log(this.state.filters);
     window.scrollTo(0, 0);
     await this.showHouse();
   };
@@ -103,7 +103,7 @@ export default class HouseList extends React.PureComponent {
         end: 20,
       },
     });
-    console.log("data", data);
+    // console.log("data", data);
     return data;
   };
 
